@@ -1,0 +1,20 @@
+body {
+    position: relative;
+    padding: 0;
+    margin: 0;
+}
+
+#main {
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+    background: linear-gradient( #8B7FD7 0%, #b5b1ca 65%) no-repeat;;
+}
+
+#header {
+    position: fixed;
+    z-index: 2;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
