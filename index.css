@@ -4,11 +4,21 @@ body {
     margin: 0;
 }
 
+
+
 #main {
     position: relative;
     height: 100vh;
     width: 100vw;
-    background: linear-gradient( #8B7FD7 0%, #b5b1ca 65%) no-repeat;;
+    background: linear-gradient( #5d1dac 0%, #aaa1db 65%) no-repeat;;
+}
+
+#part2 {
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+    background: #aaa1db;
+    ;
 }
 
 #header {
