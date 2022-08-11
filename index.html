@@ -1,35 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-    <script defer type="module" src="/js/firebase.js"></script>
-    <script defer src="/js/index.js"></script>
-    <link rel="stylesheet" href="index.css">
-    <link rel="stylesheet" href="home.css">
-    <title>Document</title>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script defer src="/js/index.js"></script>
+  <script defer type="module" src="/js/firebase.js"></script>
+  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="home.css">
+  <title>Document</title>
 </head>
 
 <body>
-    <div class="signin">
-        <img id="logo" alt="muun logo" src="images/logo.svg">
-        <h1 style="margin-bottom: 0;">Sign in</h1>
-        <h3 id="info">info</h3>
-        <input id="username" type="text" placeholder="username">
-        <input id="password" type="password" placeholder="password">
-        <div id="buttons">
-          <button onclick="window.location = 'pages/signup/signup.html' " id="signup-btn">
-            sign up
-          </button>
-          <button id="signin-btn">
-            sign in
-          </button>
-        </div>
-        <a href="pages/forgot/forgot.html" id="forgot-password">forgot password</a>
-      </div>
+  <div class="signin">
+    <img id="logo" alt="muun logo" src="images/logo.svg">
+    <h1 style="margin-bottom: 0;">Sign in</h1>
+    <h3 id="info">info</h3>
+    <input id="username" type="text" placeholder="username">
+    <input id="password" type="password" placeholder="password">
+    <div id="buttons">
+      <button onclick="window.location = 'pages/signup/signup.html' " id="signup-btn">
+        sign up
+      </button>
+      <button id="signin-btn">
+        sign in
+      </button>
+    </div>
+    <a href="pages/forgot/forgot.html" id="forgot-password">forgot password</a>
+  </div>
 </body>
 
 </html>

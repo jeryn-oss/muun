@@ -30,6 +30,8 @@ const database = getDatabase(app);
 
 $('#signin-btn').click( () => {
   const email = document.getElementById('username').value;
+  const phone = document.getElementById('phone').value;
+  const birthday = document.getElementById('birthday').value;
   const password = document.getElementById('password').value;
 
     createUserWithEmailAndPassword(auth ,email, password)
