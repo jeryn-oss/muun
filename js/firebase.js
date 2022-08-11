@@ -2,6 +2,8 @@ import { initializeApp } from "/node_modules/firebase/app"
 import { getAnalytics } from "/node_modules/firebase/analytics";
 import { getAuth, onAuthStateChanged } from "/node_modules/firebase/auth";
 
+console.log('firebase.js loaded');
+
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
