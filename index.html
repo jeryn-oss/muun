@@ -4,33 +4,31 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script defer src="./js/index.js"></script>
+    <script type="module" >
+      import './js/firbase.js'
+    </script>
     <link rel="stylesheet" href="index.css">
-    <script src="/js/setup.js"></script>
-    <title>muun</title>
+    <link rel="stylesheet" href="home.css">
+    <title>Document</title>
 </head>
 <body>
-    <header id="header">
-        <div id="right-header-section">
-            <img src="" alt="">
+    <div class="signin">
+        <img id="logo" alt="muun logo" src="images/logo.svg">
+        <h1 style="margin-bottom: 0;">Sign in</h1>
+        <h3 id="info">info</h3>
+        <input id="username" type="text" placeholder="username">
+        <input id="password" type="password" placeholder="password">
+        <div id="buttons">
+          <button onclick="window.location = 'pages/signup/signup.html' " id="signup-btn">
+            sign up
+          </button>
+          <button onclick="signin()" id="signin-btn">
+            sign in
+          </button>
         </div>
-        <div id="middle-header-section">
-            <div id="middle-header-section-selector"></div>
-            <button>home</button>
-            <button>projects</button>
-             <button>about</button> 
-        </div>
-         <div id="left-header-section">
-            <button>sign in</button>
-            <button>sign up</button>
-         </div>
-
-    </header>
-    <section id="main">
-
-    </section>
-    <section id="part2">
-
-    </section>
+        <a href="pages/forgot/forgot.html" id="forgot-password">forgot password</a>
+      </div>
 </body>
 </html>
