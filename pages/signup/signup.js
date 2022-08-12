@@ -1,4 +1,4 @@
-import { signup } from '/js/firebase.js'
+import { signup } from '/firebase.js'
 
 $('#signup-btn').click( () => {
     const email = document.getElementById('email').value;

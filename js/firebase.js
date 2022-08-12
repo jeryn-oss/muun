@@ -2,7 +2,7 @@
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-analytics.js";
-import { getDatabase, set, ref, update, erase } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-database.js";
+import { getDatabase, set, ref, update } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-database.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/9.9.2/firebase-auth.js'
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -29,13 +29,11 @@ const database = getDatabase(app);
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    if ((window.location.pathname) == ('/index.html')) {
+    if ((window.location.pathname) == '/index.html') {
       window.location.href = '/pages/home/home.html'
     }
-
-
   } else {
-    if ((window.location.pathname) = !('/index.html')) {
+    if ((window.location.pathname) =! ('/index.html')) {
       window.location.href = '/index.html'
     }
   }
