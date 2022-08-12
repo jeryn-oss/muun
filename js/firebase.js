@@ -2,8 +2,8 @@
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-analytics.js";
-import { getDatabase, set, ref } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-database.js";
-import { getAuth, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.9.2/firebase-auth.js'
+import { getDatabase, set, ref, update, erase } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-database.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/9.9.2/firebase-auth.js'
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -27,22 +27,47 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const database = getDatabase(app);
 
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    if ((window.location.pathname) == ('/index.html')) {
+      window.location.href = '/pages/home/home.html'
+    }
 
-$('#signin-btn').click( () => {
-  const email = document.getElementById('username').value;
-  const phone = document.getElementById('phone').value;
-  const birthday = document.getElementById('birthday').value;
-  const password = document.getElementById('password').value;
 
-    createUserWithEmailAndPassword(auth ,email, password)
+  } else {
+    if ((window.location.pathname) = !('/index.html')) {
+      window.location.href = '/index.html'
+    }
+  }
+});
+
+function signout() {
+  signOut(auth).then(() => {
+    const dt = new Date();
+    update(ref(database, 'users/' + user.uid), {
+      last_logout: dt.toString()
+    });
+
+  }).catch(
+    (error) => {
+
+    });
+}
+
+function signup(username, email, phone, birthday, password) {
+  createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
 
-      set(ref(database, 'users/', user.uid), {
-        username: 'testtshitt',
-        email: email
+      set(ref(database, 'users/' + user.uid), {
+        username: username,
+        email: email,
+        phone: phone,
+        birthday: birthday,
       })
-      alert('User created with uid: ' + user.uid);
+        .then(() => {
+          window.location.href = '/index.html'
+        });
     })
     .catch((error) => {
       const errorCode = error.code;
@@ -50,4 +75,29 @@ $('#signin-btn').click( () => {
 
       alert(errorMessage);
     })
-});
+};
+
+function signin(username, password) {
+  signInWithEmailAndPassword(auth, username, password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+
+      const dt = new Date();
+      update(ref(database, 'users/' + user.uid), {
+        last_Login: dt,
+      });
+      window.location.href = '/pages/home/home.html'
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      $('#info').text('User not found')
+      $('#info').css('opacity', '1')
+      $('#info').css('color', 'red')
+      setTimeout(() => {
+        $('#info').css('opacity', '0')
+      }, 5000)
+    })
+}
+
+export { signup, signin, signout };
