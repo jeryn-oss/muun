@@ -26,16 +26,24 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const database = getDatabase(app);
+const user = auth.currentUser;
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
+    /*/ 
     if ((window.location.pathname) == '/index.html') {
-      window.location.href = '/pages/home/home.html'
+      window.location = '/pages/home/home.html'
     }
+    /*/
+    console.log('hhhhh')
   } else {
-    if ((window.location.pathname) =! ('/index.html')) {
-      window.location.href = '/index.html'
+    if (window.location.pathname != '/index.html' || window.location.pathname != '/pages/signup/signup.html') {
+      window.location = '/index.html'
+    }else {
+      console.log(window.location.pathname)
     }
+  
+    
   }
 });
 
@@ -98,4 +106,6 @@ function signin(username, password) {
     })
 }
 
-export { signup, signin, signout };
+export { signin };
+export { signup };
+export { signout };
