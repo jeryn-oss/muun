@@ -3,7 +3,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-analytics.js";
 import { getDatabase, set, ref, update } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-database.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendPasswordResetEmail } from 'https://www.gstatic.com/firebasejs/9.9.2/firebase-auth.js'
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendPasswordResetEmail, verifyPasswordResetCode, confirmPasswordReset } from 'https://www.gstatic.com/firebasejs/9.9.2/firebase-auth.js'
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -35,11 +35,22 @@ onAuthStateChanged(auth, (user) => {
       window.location = '/pages/home/home.html'
     }
   } else {
-    if (window.location.pathname != '/index.html' && window.location.pathname != '/pages/signup/signup.html' && window.location.pathname != "/pages/forgot/forgot.html") {
+    if (window.location.pathname != '/index.html' && window.location.pathname != '/pages/signup/signup.html' && window.location.pathname != "/pages/forgot/forgot.html" && window.location.pathname != "/pages/reset/reset.html") {
       window.location = '/index.html'
     }
   }
 });
+
+function getParameterByName( name ){
+  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+  var regexS = "[\\?&]"+name+"=([^&#]*)";
+  var regex = new RegExp( regexS );
+  var results = regex.exec( window.location.href );
+  if( results == null )
+    return "";
+  else
+    return decodeURIComponent(results[1].replace(/\+/g, " "));
+}
 
 function signout() {
   signOut(auth).then(() => {
@@ -101,19 +112,6 @@ function signin(username, password) {
     })
 }
 
-var actionCodeSettings = {
-  url: 'https://muun-88d28.firebaseapp.com/__/auth/action?mode=action&oobCode=code',
-  iOS: {
-    bundleId: 'com.example.ios'
-  },
-  android: {
-    packageName: 'com.example.android',
-    installApp: true,
-    minimumVersion: '12'
-  },
-  handleCodeInApp: true
-};
-
 function forgot(email) {
   sendPasswordResetEmail(auth, email)
     .then(function () {
@@ -141,7 +139,26 @@ function forgot(email) {
     });
 }
 
+function resetPassword(actionCode, newPass){
+  verifyPasswordResetCode(auth, actionCode).then((email) => {
+    const acountEmail = email
+    const newPassword = newPass
+
+    confirmPasswordReset(auth, actionCode, newPassword).then((resp) => {
+
+    }).catch((error) => {
+      
+    });
+  }).catch((error) => {
+
+  })
+}
+
+
+
 export { signin };
 export { signup };
 export { signout };
 export { forgot }
+export { resetPassword }
+export { getParameterByName }
