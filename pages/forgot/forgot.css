@@ -9,7 +9,7 @@ button {
     border: none;
     height: 50px;
     width: 100%;
-    background: white;
+    background: var(--secondary);
     padding: 0;
     transition: ease-in-out .2s;
 }
@@ -36,7 +36,7 @@ input {
     border: 2px solid transparent;
     border-radius: 20px;
     padding: 10px;
-    background: white;
+    background: var(--secondary);
     height: 50px;
     margin: 10px;
     width: 30%;

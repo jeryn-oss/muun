@@ -9,7 +9,7 @@ button {
     border: none;
     height: 50px;
     width: 100%;
-    background: white;
+    background: var(--secondary);
     padding: 0;
     transition: ease-in-out .2s;
 }
@@ -36,7 +36,7 @@ input {
     border: 2px solid transparent;
     border-radius: 20px;
     padding: 10px;
-    background: white;
+    background: var(--secondary);
     height: 50px;
     margin: 10px;
     width: 30%;
@@ -69,13 +69,104 @@ input {
     color: var(--secondary);
 }
 
+
 @media only screen and (max-width: 900px) {
     input {
+        width: 50%;
+    }
+
+    #birthday {
         width: 50%;
     }
 
     #buttons {
         margin-top: 10px;
         width: 50%;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    input {
+        width: 80%;
+        height: 40px;
+    }
+
+    #birthday {
+        width: 80%;
+    }
+
+    #buttons {
+        margin-top: 10px;
+        width: 80%;
+    }
+    button {
+        height: 30px;
+        font-size: 12px;
+    }
+}
+
+@media only screen and (max-height: 700px) {
+    *{
+        font-size: 20px;
+    }
+    input {
+        width: 60%;
+        height: 30px;
+        margin: 5px;
+        font-size: 10px;
+    }
+
+    #birthday {
+        width: 80%;
+    }
+
+    #logo {
+        width: 30%;
+    }
+
+    h1 {
+        margin: 0;
+    }
+
+    #buttons {
+        margin-top: 10px;
+        width: 60%;
+    }
+
+    button {
+        height: 30px;
+        font-size: 10px;
+    }
+}
+
+@media only screen and (min-width: 1800px) {
+    * {
+        font-size: 40px;
+    }
+    input {
+        width: 50%;
+        height: 60px;
+        margin: 10px;
+        font-size: 25px;
+    }
+
+    #birthday {
+        width: 50%;
+    }
+
+    #logo {
+        width: 20%;
+    }
+
+#signup-btn {
+    margin-left: 20px;
+}
+
+    #buttons {
+        margin-top: 10px;
+        width: 50%;
+    }
+    button {
+        height: 60px;
     }
 }

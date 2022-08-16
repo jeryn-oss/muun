@@ -3,7 +3,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-analytics.js";
 import { getDatabase, set, ref, update } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-database.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/9.9.2/firebase-auth.js'
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendPasswordResetEmail } from 'https://www.gstatic.com/firebasejs/9.9.2/firebase-auth.js'
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -30,20 +31,13 @@ const user = auth.currentUser;
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    /*/ 
     if ((window.location.pathname) == '/index.html') {
       window.location = '/pages/home/home.html'
     }
-    /*/
-    console.log('hhhhh')
   } else {
-    if (window.location.pathname != '/index.html' || window.location.pathname != '/pages/signup/signup.html') {
+    if (window.location.pathname != '/index.html' && window.location.pathname != '/pages/signup/signup.html' && window.location.pathname != "/pages/forgot/forgot.html") {
       window.location = '/index.html'
-    }else {
-      console.log(window.location.pathname)
     }
-  
-    
   }
 });
 
@@ -65,7 +59,8 @@ function signup(username, email, phone, birthday, password) {
     .then((userCredential) => {
       const user = userCredential.user;
 
-      set(ref(database, 'users/' + user.uid), {
+      set(ref(database, 'users/' + username), {
+        uid: user.uid,
         username: username,
         email: email,
         phone: phone,
@@ -79,7 +74,7 @@ function signup(username, email, phone, birthday, password) {
       const errorCode = error.code;
       const errorMessage = error.message;
 
-      alert(errorMessage);
+      throw 'not posible'
     })
 };
 
@@ -106,6 +101,47 @@ function signin(username, password) {
     })
 }
 
+var actionCodeSettings = {
+  url: 'https://muun-88d28.firebaseapp.com/__/auth/action?mode=action&oobCode=code',
+  iOS: {
+    bundleId: 'com.example.ios'
+  },
+  android: {
+    packageName: 'com.example.android',
+    installApp: true,
+    minimumVersion: '12'
+  },
+  handleCodeInApp: true
+};
+
+function forgot(email) {
+  sendPasswordResetEmail(auth, email)
+    .then(function () {
+
+    })
+    .catch(function (error) {
+      var msg;
+      if(error.message == 'Firebase: Error (auth/user-not-found).'){
+        msg = 'user not found'
+      }else if (error.message == 'Firebase: Error (auth/invalid-email).'){
+        msg = 'invalid email'
+      }else if(error.message == 'Firebase: Error (auth/too-many-requests).'){
+        msg = 'to many attempts'
+      }
+      else{
+        msg = 'a problem ocurred'
+        console.log(error.message)
+      }
+      $('#info').text(msg)
+      $('#info').css('opacity', '1')
+      $('#info').css('color', 'red')
+      setTimeout(() => {
+        $('#info').css('opacity', '0')
+      }, 5000)
+    });
+}
+
 export { signin };
 export { signup };
 export { signout };
+export { forgot }
