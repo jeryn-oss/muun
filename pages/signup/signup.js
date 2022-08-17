@@ -11,17 +11,15 @@ function signupAction() {
     const email = document.getElementById('email').value;
     const phone = document.getElementById('phone').value;
     const username = document.getElementById('username').value;
-    const birthday = document.getElementById('birthday').value;
     const password = document.getElementById('password').value;
     const confirm = document.getElementById('confirmpassword').value;
     if (email != '') {
         if (phone) {
-            if (birthday) {
                 if (username) {
                     if (password) {
                         if (password == confirm) {
                             try {
-                                signup(username, email, phone, birthday, password)
+                                signup(username, email, phone, password)
                             }catch (e){
                                 console.log(e)
                             }finally {
@@ -45,12 +43,6 @@ function signupAction() {
                         $('#username').css('border', '')
                     }, 5000)
                 }
-            } else {
-                $('#birthday').css('border', 'red 2px solid')
-                setTimeout(() => {
-                    $('#birthday').css('border', '')
-                }, 5000)
-            }
         } else {
             $('#phone').css('border', 'red 2px solid')
             setTimeout(() => {

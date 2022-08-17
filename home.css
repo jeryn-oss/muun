@@ -42,6 +42,7 @@ input {
     width: 30%;
     font-size: 14px;
     transition: ease-in-out .2s;
+    box-shadow: 0px 0px 10px -3px rgb(0, 0, 0);
 }
 
 #buttons {
@@ -88,7 +89,8 @@ input {
 @media only screen and (max-width: 500px) {
     input {
         width: 80%;
-        height: 40px;
+        height: 50px;
+
     }
 
     #birthday {
@@ -100,41 +102,8 @@ input {
         width: 80%;
     }
     button {
-        height: 30px;
+        height: 50px;
         font-size: 12px;
     }
 }
 
-@media only screen and (max-height: 700px) {
-    *{
-        font-size: 20px;
-    }
-    input {
-        width: 60%;
-        height: 30px;
-        margin: 5px;
-        font-size: 10px;
-    }
-
-    #birthday {
-        width: 80%;
-    }
-
-    #logo {
-        width: 30%;
-    }
-
-    h1 {
-        margin: 0;
-    }
-
-    #buttons {
-        margin-top: 10px;
-        width: 60%;
-    }
-
-    button {
-        height: 30px;
-        font-size: 10px;
-    }
-}

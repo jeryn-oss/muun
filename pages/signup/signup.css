@@ -29,7 +29,7 @@ button {
     align-self: center;
     justify-self: center;
     width: 30%;
-    color: white;
+    color: grey;
 }
 
 #signup-btn {
@@ -83,54 +83,29 @@ input {
 }
 
 @media only screen and (max-width: 500px) {
-    input {
-        width: 80%;
-        height: 35px;
+    #logo{
+        width: 40%;
+        margin: 0;
     }
 
-    #birthday {
-        width: 80%;
-    }
-
-    #buttons {
-        margin-top: 10px;
-        width: 80%;
-    }
-    button {
-        height: 30px;
-    }
-}
-
-@media only screen and (max-height: 700px) {
-    *{
+    h1 {
         font-size: 20px;
     }
     input {
         width: 80%;
-        height: 10px;
-        margin: 5px;
-        font-size: 12px;
+        height: 50px;
     }
 
     #birthday {
         width: 80%;
     }
 
-    #logo {
-        width: 20%;
-    }
-
-    h1 {
-        margin: 0;
-    }
-
     #buttons {
         margin-top: 10px;
         width: 80%;
     }
-
     button {
-        height: 25px;
+        height: 50px;
     }
 }
 

@@ -65,7 +65,7 @@ function signout() {
     });
 }
 
-function signup(username, email, phone, birthday, password) {
+function signup(username, email, phone, password) {
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
@@ -75,7 +75,6 @@ function signup(username, email, phone, birthday, password) {
         username: username,
         email: email,
         phone: phone,
-        birthday: birthday,
       })
         .then(() => {
           window.location.href = '/index.html'
