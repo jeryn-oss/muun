@@ -41,12 +41,12 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-function getParameterByName( name ){
-  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-  var regexS = "[\\?&]"+name+"=([^&#]*)";
-  var regex = new RegExp( regexS );
-  var results = regex.exec( window.location.href );
-  if( results == null )
+function getParameterByName(name) {
+  name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+  var regexS = "[\\?&]" + name + "=([^&#]*)";
+  var regex = new RegExp(regexS);
+  var results = regex.exec(window.location.href);
+  if (results == null)
     return "";
   else
     return decodeURIComponent(results[1].replace(/\+/g, " "));
@@ -119,14 +119,14 @@ function forgot(email) {
     })
     .catch(function (error) {
       var msg;
-      if(error.message == 'Firebase: Error (auth/user-not-found).'){
+      if (error.message == 'Firebase: Error (auth/user-not-found).') {
         msg = 'user not found'
-      }else if (error.message == 'Firebase: Error (auth/invalid-email).'){
+      } else if (error.message == 'Firebase: Error (auth/invalid-email).') {
         msg = 'invalid email'
-      }else if(error.message == 'Firebase: Error (auth/too-many-requests).'){
+      } else if (error.message == 'Firebase: Error (auth/too-many-requests).') {
         msg = 'to many attempts'
       }
-      else{
+      else {
         msg = 'a problem ocurred'
         console.log(error.message)
       }
@@ -139,18 +139,30 @@ function forgot(email) {
     });
 }
 
-function resetPassword(actionCode, newPass){
+function resetPassword(actionCode, newPass, continueUrl, lang) {
   verifyPasswordResetCode(auth, actionCode).then((email) => {
     const acountEmail = email
     const newPassword = newPass
 
     confirmPasswordReset(auth, actionCode, newPassword).then((resp) => {
-
+      $('#pass').text('password changed')
+      $('#conf-text').css('display', 'none')
+      $('#text').css('display', 'none')
+      $('#submit-btn').css('display', 'none')
+      $('.item').css('display', 'flex')
+      setTimeout(() => {
+        document.location = '/index.html'
+      }, 5000);
     }).catch((error) => {
-      
+      console.log(error)
     });
   }).catch((error) => {
-
+    $('#info').text('link expired')
+    $('#info').css('opacity', '1')
+    $('#info').css('color', 'red')
+    setTimeout(() => {
+      $('#info').css('opacity', '0')
+    }, 5000)
   })
 }
 
