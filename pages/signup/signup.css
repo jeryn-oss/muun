@@ -134,34 +134,3 @@ input {
     }
 }
 
-@media only screen and (min-width: 1800px) {
-    * {
-        font-size: 40px;
-    }
-    input {
-        width: 50%;
-        height: 60px;
-        margin: 10px;
-        font-size: 25px;
-    }
-
-    #birthday {
-        width: 50%;
-    }
-
-    #logo {
-        width: 20%;
-    }
-
-#signup-btn {
-    margin-left: 20px;
-}
-
-    #buttons {
-        margin-top: 10px;
-        width: 50%;
-    }
-    button {
-        height: 60px;
-    }
-}

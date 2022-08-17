@@ -1,6 +1,16 @@
 import { signin } from "/js/firebase.js"
 
 $("#signin-btn").click(() => {
+    signIn()
+});
+$('html').keypress(function (e) {
+    if (e.which == 13) {
+        signIn()
+    }
+});
+
+
+function signIn(){
     var user = $("#username").val()
     var pass = $('#password').val()
 
@@ -10,7 +20,7 @@ $("#signin-btn").click(() => {
         $('#info').css('color', 'red')
         setTimeout(() => {
             $('#info').css('opacity', '0')
-        }, 5000)
+        } , 5000)
     }
 
     if (user == '') {
@@ -19,10 +29,10 @@ $("#signin-btn").click(() => {
         $('#info').css('color', 'red')
         setTimeout(() => {
             $('#info').css('opacity', '0')
-        }, 5000)
+        } , 5000)
     }
 
     if (user != '' && pass != '') {
         signin(user, pass)
     }
-});
+}
