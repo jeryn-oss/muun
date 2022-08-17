@@ -114,7 +114,14 @@ function signin(username, password) {
 function forgot(email) {
   sendPasswordResetEmail(auth, email)
     .then(function () {
-
+      $('#pass').text('password changed')
+      $('#conf-text').css('display', 'none')
+      $('#text').css('display', 'none')
+      $('#submit-btn').css('display', 'none')
+      $('.item').css('display', 'flex')
+      setTimeout(() => {
+        document.location = '/index.html'
+      }, 5000);
     })
     .catch(function (error) {
       var msg;

@@ -49,8 +49,51 @@ input {
     margin-right: 10px;
 }
 
-#code-btn {
+.item {
+    height: 10px;
+    width: 10px;
+    background: var(--main);
+    border-radius: 25px;
 
+}
+
+.item.boxshadow{
+    box-shadow: 0px 0px 10px rgb(0, 0, 0);
+}
+
+.item {
+    display: none;
+    position: fixed;
+    top: 100%;
+    animation: load infinite 2s ease-in-out;
+    z-index: 1;
+}
+
+@keyframes load {
+    0%{
+        width: 50%;
+        left: 25%;
+    }
+
+    25%{
+        width: 2%;
+
+    }
+
+    50% {
+        width: 50%;
+        right: 25%;
+    }
+
+    75% {
+        width: 2%;
+        
+    }
+
+    100%{
+        width: 50%;
+        right: 25%;
+    }
 }
 
 #buttons {
