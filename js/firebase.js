@@ -83,8 +83,6 @@ function signup(username, email, phone, password) {
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
-
-      throw 'not posible'
     })
 };
 

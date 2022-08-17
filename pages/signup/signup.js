@@ -18,13 +18,7 @@ function signupAction() {
                 if (username) {
                     if (password) {
                         if (password == confirm) {
-                            try {
                                 signup(username, email, phone, password)
-                            }catch (e){
-                                console.log(e)
-                            }finally {
-                                console.log('error')
-                            }
                         } else {
                             $('#confirmpassword').css('border', 'red 2px solid')
                             setTimeout(() => {
