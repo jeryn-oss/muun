@@ -114,10 +114,10 @@ function signin(username, password) {
 function forgot(email) {
   sendPasswordResetEmail(auth, email)
     .then(function () {
-      $('#pass').text('password changed')
+      $('#pass').text('instructions sent to email')
       $('#conf-text').css('display', 'none')
       $('#text').css('display', 'none')
-      $('#submit-btn').css('display', 'none')
+      $('#buttons').css('display', 'none')
       $('.item').css('display', 'flex')
       setTimeout(() => {
         document.location = '/index.html'
