@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type":"module",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,6 +19,7 @@
   "homepage": "https://github.com/jeryn-oss/muun#readme",
   "dependencies": {
     "firebase": "^9.9.2",
+    "moment": "^2.29.4",
     "require": "^2.4.20"
   }
 }

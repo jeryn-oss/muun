@@ -1,10 +1,12 @@
 // Import the functions you need from the SDKs you need
-
+var script = document.createElement('script');
+script.src = 'https://MomentJS.com/downloads/moment.js';
+document.getElementsByTagName('head')[0].appendChild(script);
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-analytics.js";
-import { getDatabase, set, ref, update } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-database.js";
+import { getDatabase, set, get, ref, update } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-database.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendPasswordResetEmail, verifyPasswordResetCode, confirmPasswordReset } from 'https://www.gstatic.com/firebasejs/9.9.2/firebase-auth.js'
-
+import { updateProfile } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-auth.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -31,8 +33,8 @@ const user = auth.currentUser;
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    if ((window.location.pathname) == '/index.html') {
-      window.location = '/pages/home/home.html'
+    if (window.location.pathname == '/index.html') {
+      document.location = '/pages/home/home.html'
     }
   } else {
     if (window.location.pathname != '/index.html' && window.location.pathname != '/pages/signup/signup.html' && window.location.pathname != "/pages/forgot/forgot.html" && window.location.pathname != "/pages/reset/reset.html") {
@@ -65,48 +67,157 @@ function signout() {
     });
 }
 
-function signup(username, email, phone, password) {
+async function signup(username, email, phone, password) {
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
-
-      set(ref(database, 'users/' + username), {
+      set(ref(database, 'users/' + username.toLowerCase()), {
+        dateCreated: moment().format('MMMM Do YYYY, h:mm:ss a'),
         uid: user.uid,
-        username: username,
+        username: username.toLowerCase(),
         email: email,
         phone: phone,
       })
         .then(() => {
-          window.location.href = '/index.html'
+          updateProfile(user, { displayName: username.toLowerCase() }).then(() => {
+            $('#pass').css('font-size', '14px')
+            $('#pass').text('user created')
+            $('input').css('display', 'none')
+            $('#buttons').css('display', 'none')
+            $('.item').css('display', 'flex')
+            setTimeout(() => {
+              document.location = '/index.html'
+            }, 5000);
+          }).catch((err) => {
+            console.log(err)
+            $('#info').text('A problem occured')
+            $('#info').css('opacity', '1')
+            $('#info').css('color', 'red')
+            setTimeout(() => {
+              $('#info').css('opacity', '0')
+            }, 8000)
+          }
+          )
         });
     })
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
+      if (errorCode == 'auth/email-already-in-use') {
+        $('#info').text('Email already in use')
+        $('#info').css('opacity', '1')
+        $('#info').css('color', 'red')
+        setTimeout(() => {
+          $('#info').css('opacity', '0')
+        }, 8000)
+      } else if (errorCode == 'auth/invalid-email') {
+        $('#info').text('Invalid email')
+        $('#info').css('opacity', '1')
+        $('#info').css('color', 'red')
+        setTimeout(() => {
+          $('#info').css('opacity', '0')
+        }, 8000)
+      } else if (errorCode == 'auth/weak-password') {
+        $('#info').text('Weak password')
+        $('#info').css('opacity', '1')
+        $('#info').css('color', 'red')
+        setTimeout(() => {
+          $('#info').css('opacity', '0')
+        }, 8000)
+      }
     })
 };
 
 function signin(username, password) {
-  signInWithEmailAndPassword(auth, username, password)
-    .then((userCredential) => {
-      const user = userCredential.user;
+  $('#info').text('Signing in')
+  $('#info').css('opacity', '1')
+  $('#info').css('font-size', '14px')
+  $('#info').css('color', 'var(--main)')
+  $('button').css('display', 'none')
+  $('input').css('display', 'none')
+  $('.item').css('display', 'flex')
+  $('#forgot-password').css('display', 'none')
+  $('#pass').css('display', 'none')
+  setTimeout(() => {
+    signInWithEmailAndPassword(auth, username, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        update(ref(database, 'users/' + user.displayName), {
+          lastLogin: moment().format('MMMM Do YYYY, h:mm:ss a')
+        });
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        if (validateEmail(username) == false) {
+        get(ref(database, 'users/' + username.toLowerCase())).then((snapshot) => {
+          $('#info').text('Signing in')
+          $('#info').css('opacity', '1')
+          $('#info').css('font-size', '14px')
+          $('#info').css('color', 'var(--main)')
+          $('button').css('display', 'none')
+          $('input').css('display', 'none')
+          $('.item').css('display', 'flex')
+          $('#forgot-password').css('display', 'none')
+          $('#pass').css('display', 'none')
+          setTimeout(() => {
+            if (snapshot.exists()) {
+              const newUser = snapshot.val().email
+              signInWithEmailAndPassword(auth, newUser, password)
+                .then((userCredential) => {
+                  const user = userCredential.user;
+                  update(ref(database, 'users/' + user.displayName), {
+                    lastLogin: moment().format('MMMM Do YYYY, h:mm:ss a')
+                  });
+                }).catch((error) => {
+                  $('#info').css('font-size', '10px')
+                  $('#info').text('incorect password or email/user')
+                  $('#info').css('opacity', '1')
+                  $('#info').css('color', 'red')
+                  $('#info').css('color', 'red')
+                  $('button').css('display', 'block')
+                  $('input').css('display', 'flex')
+                  $('.item').css('display', 'none')
+                  $('#forgot-password').css('display', 'flex')
+                  $('#pass').css('display', 'flex')
+                  setTimeout(() => {
+                    $('#info').css('opacity', '0')
+                  }, 5000)
+                });
+            } else {
+              $('#info').css('font-size', '10px')
+              $('#info').text('User does not exist')
+              $('#info').css('opacity', '1')
+              $('#info').css('color', 'red')
+              $('button').css('display', 'block')
+              $('input').css('display', 'flex')
+              $('.item').css('display', 'none')
+              $('#forgot-password').css('display', 'flex')
+              $('#pass').css('display', 'flex')
+              setTimeout(() => {
+                $('#info').css('opacity', '0')
+              }, 5000)
+            }
+          }, 5000)
+        })
+      }else {
+          $('#info').css('font-size', '10px')
+          $('#info').text('incorect password or email/user')
+          $('#info').css('opacity', '1')
+          $('#info').css('color', 'red')
+          $('#info').css('color', 'red')
+          $('button').css('display', 'block')
+          $('input').css('display', 'flex')
+          $('.item').css('display', 'none')
+          $('#forgot-password').css('display', 'flex')
+          $('#pass').css('display', 'flex')
+          setTimeout(() => {
+            $('#info').css('opacity', '0')
+          }, 5000)
+        }
+      })
+  }, 5000);
 
-      const dt = new Date();
-      update(ref(database, 'users/' + user.uid), {
-        last_Login: dt,
-      });
-      window.location.href = '/pages/home/home.html'
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      $('#info').text('User not found')
-      $('#info').css('opacity', '1')
-      $('#info').css('color', 'red')
-      setTimeout(() => {
-        $('#info').css('opacity', '0')
-      }, 5000)
-    })
 }
 
 function forgot(email) {
@@ -149,6 +260,9 @@ function resetPassword(actionCode, newPass, continueUrl, lang) {
     const newPassword = newPass
 
     confirmPasswordReset(auth, actionCode, newPassword).then((resp) => {
+      update(ref(database, 'users/' + user.displayName), {
+        lastPasswordChange: moment().format('MMMM Do YYYY, h:mm:ss a')
+      });
       $('#pass').text('password changed')
       $('#conf-text').css('display', 'none')
       $('#text').css('display', 'none')
@@ -170,7 +284,29 @@ function resetPassword(actionCode, newPass, continueUrl, lang) {
   })
 }
 
+const validateEmail = (email) => {
+  return String(email)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+};
 
+function checkUsername(username) {
+  return new Promise((resolve, reject) => {
+    get(ref(database, 'users/' + username)).then((snapshot) => {
+      if (snapshot.exists()) {
+        resolve(false);
+      } else {
+        resolve(true);
+      }
+    });
+  });
+}
+
+function confirmPhone(num) {
+  return (/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im).test(num);
+}
 
 export { signin };
 export { signup };
@@ -178,3 +314,6 @@ export { signout };
 export { forgot }
 export { resetPassword }
 export { getParameterByName }
+export { confirmPhone }
+export { validateEmail }
+export { checkUsername }
