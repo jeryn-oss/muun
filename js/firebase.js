@@ -144,21 +144,20 @@ function signin(username, password, type) {
   setTimeout(() => {
     signInWithEmailAndPassword(auth, username, password)
       .then((userCredential) => {
+        const user = userCredential.user;
         if (type == 'passwordchange') {
           update(ref(database, 'users/' + user.displayName), {
             lastPasswordChange: moment().format('MMMM Do YYYY, h:mm:ss a')
           });
         }
-        const user = userCredential.user;
         update(ref(database, 'users/' + user.displayName), {
           lastLogin: moment().format('MMMM Do YYYY, h:mm:ss a')
         });
-
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        if (validateEmail(username) != true) {
+        if (validateEmail(username) == null) {
           get(ref(database, 'users/' + username.toLowerCase())).then((snapshot) => {
             $('#info').text('Signing in')
             $('#info').css('opacity', '1')
@@ -233,6 +232,7 @@ function forgot(email) {
   sendPasswordResetEmail(auth, email)
     .then(function () {
       $('#pass').text('instructions sent to email')
+      $('#pass').css('font-size', '10px')
       $('#conf-text').css('display', 'none')
       $('#text').css('display', 'none')
       $('#buttons').css('display', 'none')
@@ -291,7 +291,7 @@ function resetPassword(actionCode, newPass, continueUrl, lang) {
   })
 }
 
-const validateEmail = (email) => {
+function validateEmail(email){
   return String(email)
     .toLowerCase()
     .match(
