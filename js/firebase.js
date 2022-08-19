@@ -144,18 +144,16 @@ function signin(username, password, type) {
   setTimeout(() => {
     signInWithEmailAndPassword(auth, username, password)
       .then((userCredential) => {
-        const user = userCredential.user;
-        update(ref(database, 'users/' + user.displayName), {
-          lastLogin: moment().format('MMMM Do YYYY, h:mm:ss a')
-        });
         if (type == 'passwordchange') {
           update(ref(database, 'users/' + user.displayName), {
             lastPasswordChange: moment().format('MMMM Do YYYY, h:mm:ss a')
           });
-          setTimeout(() => {
-            document.location = '/pages/home/home.html'
-          }), 2000;
         }
+        const user = userCredential.user;
+        update(ref(database, 'users/' + user.displayName), {
+          lastLogin: moment().format('MMMM Do YYYY, h:mm:ss a')
+        });
+
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -275,6 +273,7 @@ function resetPassword(actionCode, newPass, continueUrl, lang) {
       $('#conf-text').css('display', 'none')
       $('#text').css('display', 'none')
       $('#submit-btn').css('display', 'none')
+      $('#buttons').css('display', 'none')
       $('.item').css('display', 'flex')
       setTimeout(() => {
         signin(acountEmail, newPassword, 'passwordchange')
