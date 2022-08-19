@@ -149,7 +149,8 @@ function signin(username, password) {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        if (validateEmail(username) == false) {
+        if (validateEmail(username) != true) {
+          console.log('email not valid')
         get(ref(database, 'users/' + username.toLowerCase())).then((snapshot) => {
           $('#info').text('Signing in')
           $('#info').css('opacity', '1')
