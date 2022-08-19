@@ -4,7 +4,8 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
-    --main: #8B7FD7;
+    --main: white;
+    --shit: #8B7FD7;
     --secondary: black;
     color: var(--main);
 }

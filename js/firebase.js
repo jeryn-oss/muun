@@ -32,16 +32,20 @@ const database = getDatabase(app);
 const user = auth.currentUser;
 
 onAuthStateChanged(auth, (user) => {
-  if (user) {
+  setTimeout(() => {
+    if (user) {
     if (window.location.pathname == '/index.html') {
       document.location = '/pages/home/home.html'
-      localStorage.setItem('user', JSON.stringify(user).displayName)
     }
+    localStorage.setItem('user', user.displayName)
   } else {
     if (window.location.pathname != '/index.html' && window.location.pathname != '/pages/signup/signup.html' && window.location.pathname != "/pages/forgot/forgot.html" && window.location.pathname != "/pages/reset/reset.html") {
       window.location = '/index.html'
     }
+    localStorage.removeItem('user')
   }
+  }, 2000);
+  
 });
 
 function getParameterByName(name) {
@@ -58,12 +62,11 @@ function getParameterByName(name) {
 
 function signout() {
   const userLocal = localStorage.getItem('user')
-  update(ref(database, 'users/' + userLocal), {
+  update(ref(database, 'users/' + userLocal.toLocaleLowerCase()), {
     lastLogout: moment().format('MMMM Do YYYY, h:mm:ss a')
   });
   signOut(auth).then(() => {
     localStorage.removeItem('user')
-    window.location = '/index.html'
   }
   ).catch((error) => {
     console.log(error)
@@ -190,7 +193,7 @@ function signin(username, password, type) {
                     $('#pass').css('display', 'flex')
                     setTimeout(() => {
                       $('#info').css('opacity', '0')
-                    }, 5000)
+                    }, 2000)
                   });
               } else {
                 $('#info').css('font-size', '10px')
@@ -204,9 +207,9 @@ function signin(username, password, type) {
                 $('#pass').css('display', 'flex')
                 setTimeout(() => {
                   $('#info').css('opacity', '0')
-                }, 5000)
+                }, 2000)
               }
-            }, 5000)
+            }, 2000)
           })
         } else {
           $('#info').css('font-size', '10px')
@@ -224,7 +227,7 @@ function signin(username, password, type) {
           }, 5000)
         }
       })
-  }, 5000);
+  }, 1000);
 
 }
 
