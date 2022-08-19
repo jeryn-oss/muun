@@ -54,6 +54,8 @@ function getParameterByName(name) {
     return decodeURIComponent(results[1].replace(/\+/g, " "));
 }
 
+console.log(user)
+
 function signout() {
   signOut(auth).then(() => {
     const dt = new Date();
@@ -150,58 +152,57 @@ function signin(username, password) {
         const errorCode = error.code;
         const errorMessage = error.message;
         if (validateEmail(username) != true) {
-          console.log('email not valid')
-        get(ref(database, 'users/' + username.toLowerCase())).then((snapshot) => {
-          $('#info').text('Signing in')
-          $('#info').css('opacity', '1')
-          $('#info').css('font-size', '14px')
-          $('#info').css('color', 'var(--main)')
-          $('button').css('display', 'none')
-          $('input').css('display', 'none')
-          $('.item').css('display', 'flex')
-          $('#forgot-password').css('display', 'none')
-          $('#pass').css('display', 'none')
-          setTimeout(() => {
-            if (snapshot.exists()) {
-              const newUser = snapshot.val().email
-              signInWithEmailAndPassword(auth, newUser, password)
-                .then((userCredential) => {
-                  const user = userCredential.user;
-                  update(ref(database, 'users/' + user.displayName), {
-                    lastLogin: moment().format('MMMM Do YYYY, h:mm:ss a')
+          get(ref(database, 'users/' + username.toLowerCase())).then((snapshot) => {
+            $('#info').text('Signing in')
+            $('#info').css('opacity', '1')
+            $('#info').css('font-size', '14px')
+            $('#info').css('color', 'var(--main)')
+            $('button').css('display', 'none')
+            $('input').css('display', 'none')
+            $('.item').css('display', 'flex')
+            $('#forgot-password').css('display', 'none')
+            $('#pass').css('display', 'none')
+            setTimeout(() => {
+              if (snapshot.exists()) {
+                const newUser = snapshot.val().email
+                signInWithEmailAndPassword(auth, newUser, password)
+                  .then((userCredential) => {
+                    const user = userCredential.user;
+                    update(ref(database, 'users/' + user.displayName), {
+                      lastLogin: moment().format('MMMM Do YYYY, h:mm:ss a')
+                    });
+                  }).catch((error) => {
+                    $('#info').css('font-size', '10px')
+                    $('#info').text('incorect password or email/user')
+                    $('#info').css('opacity', '1')
+                    $('#info').css('color', 'red')
+                    $('#info').css('color', 'red')
+                    $('button').css('display', 'block')
+                    $('input').css('display', 'flex')
+                    $('.item').css('display', 'none')
+                    $('#forgot-password').css('display', 'flex')
+                    $('#pass').css('display', 'flex')
+                    setTimeout(() => {
+                      $('#info').css('opacity', '0')
+                    }, 5000)
                   });
-                }).catch((error) => {
-                  $('#info').css('font-size', '10px')
-                  $('#info').text('incorect password or email/user')
-                  $('#info').css('opacity', '1')
-                  $('#info').css('color', 'red')
-                  $('#info').css('color', 'red')
-                  $('button').css('display', 'block')
-                  $('input').css('display', 'flex')
-                  $('.item').css('display', 'none')
-                  $('#forgot-password').css('display', 'flex')
-                  $('#pass').css('display', 'flex')
-                  setTimeout(() => {
-                    $('#info').css('opacity', '0')
-                  }, 5000)
-                });
-            } else {
-              $('#info').css('font-size', '10px')
-              $('#info').text('User does not exist')
-              $('#info').css('opacity', '1')
-              $('#info').css('color', 'red')
-              $('button').css('display', 'block')
-              $('input').css('display', 'flex')
-              $('.item').css('display', 'none')
-              $('#forgot-password').css('display', 'flex')
-              $('#pass').css('display', 'flex')
-              setTimeout(() => {
-                $('#info').css('opacity', '0')
-              }, 5000)
-            }
-          }, 5000)
-        })
-      }else {
+              } else {
+                $('#info').css('font-size', '10px')
+                $('#info').text('User does not exist')
+                $('#info').css('opacity', '1')
+                $('#info').css('color', 'red')
+                $('button').css('display', 'block')
+                $('input').css('display', 'flex')
+                $('.item').css('display', 'none')
+                $('#forgot-password').css('display', 'flex')
+                $('#pass').css('display', 'flex')
+                setTimeout(() => {
+                  $('#info').css('opacity', '0')
+                }, 5000)
+              }
+            }, 5000)
+          })
+        } else {
           $('#info').css('font-size', '10px')
           $('#info').text('incorect password or email/user')
           $('#info').css('opacity', '1')
@@ -255,13 +256,13 @@ function forgot(email) {
     });
 }
 
+
 function resetPassword(actionCode, newPass, continueUrl, lang) {
-  verifyPasswordResetCode(auth, actionCode).then((email) => {
+  verifyPasswordResetCode(auth, actionCode).then((email, userCredential) => {
     const acountEmail = email
     const newPassword = newPass
-
     confirmPasswordReset(auth, actionCode, newPassword).then((resp) => {
-      update(ref(database, 'users/' + user.displayName), {
+      update(ref(database, 'users/' + auth.currentUser.displayName), {
         lastPasswordChange: moment().format('MMMM Do YYYY, h:mm:ss a')
       });
       $('#pass').text('password changed')
