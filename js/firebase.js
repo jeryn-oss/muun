@@ -130,7 +130,7 @@ async function signup(username, email, phone, password) {
     })
 };
 
-function signin(username, password) {
+function signin(username, password, type) {
   $('#info').text('Signing in')
   $('#info').css('opacity', '1')
   $('#info').css('font-size', '14px')
@@ -147,6 +147,14 @@ function signin(username, password) {
         update(ref(database, 'users/' + user.displayName), {
           lastLogin: moment().format('MMMM Do YYYY, h:mm:ss a')
         });
+        if (type == 'passwordchange') {
+          update(ref(database, 'users/' + user.displayName), {
+            lastPasswordChange: moment().format('MMMM Do YYYY, h:mm:ss a')
+          });
+          setTimeout(() => {
+            document.location = '/pages/home/home.html'
+          }), 2000;
+        }
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -258,20 +266,17 @@ function forgot(email) {
 
 
 function resetPassword(actionCode, newPass, continueUrl, lang) {
-  verifyPasswordResetCode(auth, actionCode).then((email, userCredential) => {
+  verifyPasswordResetCode(auth, actionCode).then((email) => {
     const acountEmail = email
     const newPassword = newPass
     confirmPasswordReset(auth, actionCode, newPassword).then((resp) => {
-      update(ref(database, 'users/' + auth.currentUser.displayName), {
-        lastPasswordChange: moment().format('MMMM Do YYYY, h:mm:ss a')
-      });
       $('#pass').text('password changed')
       $('#conf-text').css('display', 'none')
       $('#text').css('display', 'none')
       $('#submit-btn').css('display', 'none')
       $('.item').css('display', 'flex')
       setTimeout(() => {
-        document.location = '/index.html'
+        signin(acountEmail, newPassword, 'passwordchange')
       }, 5000);
     }).catch((error) => {
       console.log(error)
