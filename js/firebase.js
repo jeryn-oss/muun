@@ -35,6 +35,7 @@ onAuthStateChanged(auth, (user) => {
   if (user) {
     if (window.location.pathname == '/index.html') {
       document.location = '/pages/home/home.html'
+      localStorage.setItem('user', JSON.stringify(user).displayName)
     }
   } else {
     if (window.location.pathname != '/index.html' && window.location.pathname != '/pages/signup/signup.html' && window.location.pathname != "/pages/forgot/forgot.html" && window.location.pathname != "/pages/reset/reset.html") {
@@ -54,19 +55,19 @@ function getParameterByName(name) {
     return decodeURIComponent(results[1].replace(/\+/g, " "));
 }
 
-console.log(user)
 
 function signout() {
+  const userLocal = localStorage.getItem('user')
+  update(ref(database, 'users/' + userLocal), {
+    lastLogout: moment().format('MMMM Do YYYY, h:mm:ss a')
+  });
   signOut(auth).then(() => {
-    const dt = new Date();
-    update(ref(database, 'users/' + user.uid), {
-      last_logout: dt.toString()
-    });
-
-  }).catch(
-    (error) => {
-
-    });
+    localStorage.removeItem('user')
+    window.location = '/index.html'
+  }
+  ).catch((error) => {
+    console.log(error)
+  });
 }
 
 async function signup(username, email, phone, password) {
@@ -277,7 +278,7 @@ function resetPassword(actionCode, newPass, continueUrl, lang) {
       $('.item').css('display', 'flex')
       setTimeout(() => {
         signin(acountEmail, newPassword, 'passwordchange')
-      }, 5000);
+      }, 3000);
     }).catch((error) => {
       console.log(error)
     });
