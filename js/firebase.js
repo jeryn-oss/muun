@@ -74,6 +74,12 @@ function signout() {
 }
 
 async function signup(username, email, phone, password) {
+  $('#info').css('opacity', '0')
+  $('#pass').text('attempting to create account')
+  $('#pass').css('font-size', '12px')
+  $('input').css('display', 'none')
+  $('button').css('display', 'none')
+  $('.item').css('display', 'flex')
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
@@ -86,8 +92,7 @@ async function signup(username, email, phone, password) {
       })
         .then(() => {
           updateProfile(user, { displayName: username.toLowerCase() }).then(() => {
-            $('#pass').css('font-size', '14px')
-            $('#pass').text('user created')
+            $('#info').text('user created')
             $('input').css('display', 'none')
             $('#buttons').css('display', 'none')
             $('.item').css('display', 'flex')
@@ -96,6 +101,11 @@ async function signup(username, email, phone, password) {
             }, 5000);
           }).catch((err) => {
             console.log(err)
+            $('#pass').text('Sign up')
+            $('#pass').css('font-size', '20px')
+            $('input').css('display', 'block')
+            $('button').css('display', 'block')
+            $('.item').css('display', 'none')
             $('#info').text('A problem occured')
             $('#info').css('opacity', '1')
             $('#info').css('color', 'red')
@@ -107,6 +117,11 @@ async function signup(username, email, phone, password) {
         });
     })
     .catch((error) => {
+      $('#pass').text('Sign up')
+      $('#pass').css('font-size', '20')
+      $('input').css('display', 'block')
+      $('button').css('display', 'block')
+      $('.item').css('display', 'none')
       const errorCode = error.code;
       const errorMessage = error.message;
       if (errorCode == 'auth/email-already-in-use') {
