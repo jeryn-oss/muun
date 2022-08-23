@@ -34,18 +34,18 @@ const user = auth.currentUser;
 onAuthStateChanged(auth, (user) => {
   setTimeout(() => {
     if (user) {
-    if (window.location.pathname == '/index.html') {
-      document.location = '/pages/home/home.html'
+      if (window.location.pathname == '/index.html') {
+        document.location = '/pages/home/home.html'
+      }
+      localStorage.setItem('user', user.displayName)
+      localStorage.setItem('user-info', JSON.stringify(user))
+    } else {
+      if (window.location.pathname != '/index.html' && window.location.pathname != '/pages/signup/signup.html' && window.location.pathname != "/pages/forgot/forgot.html" && window.location.pathname != "/pages/reset/reset.html") {
+        window.location = '/index.html'
+      }
+      localStorage.removeItem('user')
     }
-    localStorage.setItem('user', user.displayName)
-  } else {
-    if (window.location.pathname != '/index.html' && window.location.pathname != '/pages/signup/signup.html' && window.location.pathname != "/pages/forgot/forgot.html" && window.location.pathname != "/pages/reset/reset.html") {
-      window.location = '/index.html'
-    }
-    localStorage.removeItem('user')
-  }
   }, 2000);
-  
 });
 
 function getParameterByName(name) {
@@ -59,6 +59,20 @@ function getParameterByName(name) {
     return decodeURIComponent(results[1].replace(/\+/g, " "));
 }
 
+function getUserInfo(type) {
+  if (type.toLocaleLowerCase() == 'username') {
+    return localStorage.getItem('user')
+  }
+  if (type.toLocaleLowerCase() == 'json') {
+    var result = localStorage.getItem('user-info')
+    console.log(JSON.parse(result))
+    return JSON.parse(result);
+  }
+
+}
+
+
+//{"uid":"QEp1LpIcOPWISdCQyictA19wP0z2","email":"jeryn@gmail.com","emailVerified":false,"displayName":"jeryn","isAnonymous":false,"providerData":[{"providerId":"password","uid":"jeryn@gmail.com","displa…
 
 function signout() {
   const userLocal = localStorage.getItem('user')
@@ -67,6 +81,7 @@ function signout() {
   });
   signOut(auth).then(() => {
     localStorage.removeItem('user')
+    localStorage.removeItem('user-info')
   }
   ).catch((error) => {
     console.log(error)
@@ -309,7 +324,7 @@ function resetPassword(actionCode, newPass, continueUrl, lang) {
   })
 }
 
-function validateEmail(email){
+function validateEmail(email) {
   return String(email)
     .toLowerCase()
     .match(
@@ -342,3 +357,4 @@ export { getParameterByName }
 export { confirmPhone }
 export { validateEmail }
 export { checkUsername }
+export { getUserInfo }
