@@ -182,6 +182,8 @@ function signin(username, password, type) {
           update(ref(database, 'users/' + user.displayName), {
             lastPasswordChange: moment().format('MMMM Do YYYY, h:mm:ss a')
           });
+
+          document.location = '/pages/home/home.html'
         }
         update(ref(database, 'users/' + user.displayName), {
           lastLogin: moment().format('MMMM Do YYYY, h:mm:ss a')
@@ -303,6 +305,7 @@ function resetPassword(actionCode, newPass, continueUrl, lang) {
     const newPassword = newPass
     confirmPasswordReset(auth, actionCode, newPassword).then((resp) => {
       $('#pass').text('password changed')
+      $('#pass').css('margin-bottom', '10px')
       $('#conf-text').css('display', 'none')
       $('#text').css('display', 'none')
       $('#submit-btn').css('display', 'none')
